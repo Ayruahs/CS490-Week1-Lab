@@ -91,7 +91,9 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     
-
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        tableViewOutlet.deselectRow(at: indexPath, animated: true)
+    }
     
     // MARK: - Navigation
 
@@ -99,7 +101,28 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        let vs = segue.destination as! PhotoDetailsViewController
+        let vc = segue.destination as! PhotoDetailsViewController
+        let cell = sender as! PhotoCell
+        
+        
+        let indexPath = tableViewOutlet.indexPath(for: cell)!
+        let post = posts[indexPath.row]
+        
+        if let photos = post["photos"] as? [[String: Any]] {
+            // photos is NOT nil, we can use it!
+            // TODO: Get the photo url
+            
+            // 1.
+            let photo = photos[0]
+            // 2.
+            let originalSize = photo["original_size"] as! [String: Any]
+            // 3.
+            let urlString = originalSize["url"] as! String
+            // 4.
+            vc.photo = urlString
+            
+        }
+        
     }
     
 
